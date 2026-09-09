@@ -427,10 +427,10 @@ String criarJSON(
     return json;
 }
 
-void enviarMedicao(String json) {
+bool enviarMedicao(String json) {
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("Wi-Fi desconectado");
-        return;
+        return false;
     }
 
     HTTPClient http;
@@ -441,9 +441,14 @@ void enviarMedicao(String json) {
 
     Serial.print("Status da API: ");
     Serial.println(status);
-    Serial.println(http.getString());
+    if (status > 0)
+    {
+        Serial.println(http.getString());
+    }
 
     http.end();
+
+    return status >= 200 && status < 300;
 }
 
 void setup() {
@@ -554,9 +559,14 @@ uint32_t horaAtual = data_hora.unixtime() / 3600;
 
 if (data_hora.minute() == 0 && horaAtual != ultimaHoraEnviada)
 {
-    enviarMedicao(json);
-
-    ultimaHoraEnviada = horaAtual;
+    if (enviarMedicao(json)) {
+        Serial.println("Dados enviados para a API com sucesso.");
+        ultimaHoraEnviada = horaAtual;
+    }else{
+        Serial.println("Falha ao enviar dados para a API.");
+        delay(10000);
+        enviarMedicao(json);
+    }
 }
 //enviarMedicao(json);
 
@@ -589,7 +599,7 @@ Serial.println(json);
   Serial.println("---------------------------");
   Serial.println();
   
-  delay(30000);
+  delay(10000);
 
    server.handleClient();
 
