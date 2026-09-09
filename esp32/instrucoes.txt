@@ -1,0 +1,13 @@
+em caso de primeiro acesso do esp32 a uma rede siga as instruções abaixo:
+
+Conecte-se à rede
+ESP32_CONFIG
+Depois acesse:
+http://192.168.4.1
+
+# URL da api de persistencia dos dados
+
+## clique no link e aguarde até que a pagina da api seja carregada, o cervidor pode demorar um pouco a responder
+
+https://minimeteorolia-1.onrender.com/docs
+
