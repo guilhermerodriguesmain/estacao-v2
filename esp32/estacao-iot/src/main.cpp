@@ -30,6 +30,9 @@ RTC_DS3231 rtc;
 #define DHTTYPE    DHT11    
 DHT_Unified dht(DHTPIN, DHTTYPE);
 
+// controle de horario de envio de dados para api
+uint32_t ultimaHoraEnviada = 0;
+
 // CONECTAR AO WIFI
 
 bool conectarWiFi(String ssid, String senha)
@@ -431,7 +434,7 @@ void enviarMedicao(String json) {
     }
 
     HTTPClient http;
-    http.begin("https://minimeteorolia-1.onrender.com/medicoes");
+    http.begin("https://minimeteorolia-1.onrender.com/medicoes"); 
     http.addHeader("Content-Type", "application/json");
 
     int status = http.POST(json);
@@ -457,9 +460,12 @@ void setup() {
     while(1) delay(10);
   }
   Serial.println("RTC inicializado");
-  // ajusta data e hora para data e hora da compilação
-  rtc.adjust(DateTime(F(__DATE__),F(__TIME__)));
 
+  // verifica se o rtc perdeu energia e ajusta a hora
+  if (rtc.lostPower())
+{
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+}
   delay(10);
 
   dht.begin();
@@ -542,8 +548,17 @@ void loop() {
     data_hora.minute(), //minuto
     data_hora.second()//segundo
 );
+// envia os dados para a API de hora em hora
 
-enviarMedicao(json);
+uint32_t horaAtual = data_hora.unixtime() / 3600;
+
+if (data_hora.minute() == 0 && horaAtual != ultimaHoraEnviada)
+{
+    enviarMedicao(json);
+
+    ultimaHoraEnviada = horaAtual;
+}
+//enviarMedicao(json);
 
 Serial.println(json);
 
