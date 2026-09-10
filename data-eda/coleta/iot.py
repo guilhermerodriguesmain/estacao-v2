@@ -19,3 +19,4 @@ def coletar_dados_iot():
 def salvar_dados_csv(df, path, sep=';', encoding='utf-8'):
     df.to_csv(path, index=True, sep=sep, encoding=encoding)
     print(f"Dados salvos em {path}")
+
