@@ -27,4 +27,4 @@ def salvar_dados_sql(df, db_path, table_name):
     df.to_sql(table_name, path, if_exists='replace', index=True)
     path.close()
     print(f"Dados salvos na tabela '{table_name}' do banco de dados '{db_path}'")
-
+    
