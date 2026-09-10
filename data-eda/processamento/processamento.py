@@ -31,4 +31,15 @@ class Processamento():
         # Mescla os dataframes do IoT e do OpenMeteo com base na coluna de data
         df_merged = pd.merge(df_iot, df_openmeteo, on='date', how='outer')
         return df_merged
+
+    def salvar_dados_csv(self, df, path, sep=';', encoding='utf-8'):
+        df.to_csv(path, index=True, sep=sep, encoding=encoding)
+        print(f"Dados salvos em {path}")
+
+    def salvar_dados_sql(self, df, db_path, table_name = "dados_meteorologicos"):
+        import sqlite3
+        path = sqlite3.connect(db_path)
+        df.to_sql(table_name, path, if_exists='replace', index=True)
+        path.close()
+        print(f"Dados salvos na tabela '{table_name}' do banco de dados '{db_path}'")
         
