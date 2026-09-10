@@ -51,6 +51,7 @@ hourly_data["temperature_2m"] = hourly_temperature_2m
 hourly_data["relative_humidity_2m"] = hourly_relative_humidity_2m
 hourly_data["rain"] = hourly_rain
 hourly_data["pressure_msl"] = hourly_pressure_msl
+hourly_data["fonte"]= "openmeteo"
 
 hourly_dataframe = pd.DataFrame(data = hourly_data)
 print("\nHourly data\n", hourly_dataframe)
@@ -63,7 +64,7 @@ def salvar_dados_csv(hourly_dataframe, path, sep=';', encoding='utf-8'):
     hourly_dataframe.to_csv(path, index=True, sep=sep, encoding=encoding)
     print(f"Dados salvos em {path}")
 
-def salvar_dados_sql(hourly_dataframe, db_path, table_name):
+def salvar_dados_sql(hourly_dataframe, db_path, table_name="dados_openmeteo"):
         import sqlite3
         path = sqlite3.connect(db_path)
         hourly_dataframe.to_sql(table_name, path, if_exists='replace', index=True)

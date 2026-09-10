@@ -11,6 +11,7 @@ def coletar_dados_iot():
     if response.status_code == 200:
         dados_json = response.json()
         df = pd.DataFrame(dados_json)
+        df["fonte"] = "iot"
         return df
     else:
         print(f"Erro ao coletar dados da API: {response.status_code}")
@@ -21,10 +22,10 @@ def salvar_dados_csv(df, path, sep=';', encoding='utf-8'):
     df.to_csv(path, index=True, sep=sep, encoding=encoding)
     print(f"Dados salvos em {path}")
     
-def salvar_dados_sql(df, db_path, table_name):
+def salvar_dados_sql(df, db_path, table_name="dados_iot"):
     import sqlite3
     path = sqlite3.connect(db_path)
     df.to_sql(table_name, path, if_exists='replace', index=True)
     path.close()
     print(f"Dados salvos na tabela '{table_name}' do banco de dados '{db_path}'")
-    
+
