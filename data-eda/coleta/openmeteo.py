@@ -47,11 +47,11 @@ hourly_data = {
 	).tz_convert(response.Timezone().decode())
 }
 
-hourly_data["temperature_2m"] = hourly_temperature_2m
-hourly_data["relative_humidity_2m"] = hourly_relative_humidity_2m
-hourly_data["rain"] = hourly_rain
-hourly_data["pressure_msl"] = hourly_pressure_msl
-hourly_data["fonte"]= "openmeteo"
+hourly_data["temperature_2m"] = hourly_temperature_2m.round(2)
+hourly_data["relative_humidity_2m"] = hourly_relative_humidity_2m.round(2)
+hourly_data["rain"] = hourly_rain.round(4)
+hourly_data["pressure_msl"] = hourly_pressure_msl.round(2)
+hourly_data["fonte"]= "open-meteo"
 
 hourly_dataframe = pd.DataFrame(data = hourly_data)
 print("\nHourly data\n", hourly_dataframe)
