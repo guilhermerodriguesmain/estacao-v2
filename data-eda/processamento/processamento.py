@@ -78,3 +78,4 @@ dados_openmeteo_padronizados = padronizar.padronizar_dataframe_openmeteo(
 dados_mesclados = padronizar.mesclar_dataframes(dados_iot_padronizados, dados_openmeteo_padronizados)
 
 padronizar.salvar_dados_csv(dados_mesclados, "../dados/dados_meteorologicos.csv")
+padronizar.salvar_dados_sql(dados_mesclados, "../dados_meteorologicos.sqlite", "dados_meteorologicos")
