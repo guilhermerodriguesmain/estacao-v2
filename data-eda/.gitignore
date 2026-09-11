@@ -27,3 +27,4 @@ staticfiles/
 
 # Sistema operacional
 .DS_Store
+*.sqlite
