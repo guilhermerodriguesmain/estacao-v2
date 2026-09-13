@@ -471,6 +471,8 @@ void setup() {
 {
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 }
+rtc.adjust(DateTime(2026, 9, 9, 8, 21, 30));
+    
   delay(10);
 
   dht.begin();
@@ -559,14 +561,13 @@ uint32_t horaAtual = data_hora.unixtime() / 3600;
 
 if (data_hora.minute() == 0 && horaAtual != ultimaHoraEnviada)
 {
-    if (enviarMedicao(json)) {
-        Serial.println("Dados enviados para a API com sucesso.");
-        ultimaHoraEnviada = horaAtual;
-    }else{
-        Serial.println("Falha ao enviar dados para a API.");
-        delay(10000);
-        enviarMedicao(json);
-    }
+    while(enviarMedicao(json) == false){
+            Serial.println("Falha ao enviar dados para a API.");
+            delay(10000);
+        
+        }
+    Serial.println("Dados enviados para a API com sucesso.");
+    ultimaHoraEnviada = horaAtual;
 }
 //enviarMedicao(json);
 

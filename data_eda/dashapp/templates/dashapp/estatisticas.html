@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Estatísticas — EDA</title>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 30px;
+        background-color: #f5f6f8;
+        color: #222;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    .introducao {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 35px;
+    }
+
+    .secao {
+        background: white;
+        padding: 25px;
+        margin-bottom: 35px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .secao h2 {
+        margin-top: 0;
+    }
+
+    .resultados {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-left: 4px solid #555;
+        border-radius: 6px;
+    }
+
+    .resultados p {
+        margin: 8px 0;
+    }
+
+    .valor {
+        font-weight: bold;
+    }
+
+    .observacao {
+        color: #666;
+        line-height: 1.6;
+        margin-top: 20px;
+    }
+
+    .navegacao {
+        margin-bottom: 35px;
+    }
+
+    .navegacao a {
+        color: #333;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+
+    .navegacao a:hover {
+        text-decoration: underline;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>Estatísticas descritivas</h1>
+
+<p class="introducao">
+    Esta seção apresenta um resumo estatístico das principais
+    variáveis meteorológicas utilizadas no projeto.
+    As medidas permitem compreender a distribuição dos dados
+    antes das análises mais específicas.
+</p>
+
+<div class="navegacao">
+
+    <a href="/">Visão geral</a>
+
+    <a href="/analises/comparacao/">
+        Comparação
+    </a>
+
+    <a href="/analises/investigacao/">
+        Investigação
+    </a>
+
+    <a href="/eda/outliers/">
+        Outliers
+    </a>
+
+    <a href="/dados/registros/">
+        Registros
+    </a>
+
+</div>
+
+<section class="secao">
+
+    <h2>Resumo dos dados</h2>
+
+    <p>
+        Quantidade total de registros:
+        <span class="valor">
+            {{ quantidade_registros }}
+        </span>
+    </p>
+
+</section>
+
+{% for coluna, valores in estatisticas.items %}
+
+    <section class="secao">
+
+        <h2>{{ coluna }}</h2>
+
+        <div class="resultados">
+
+            <p>
+                Média:
+                <span class="valor">
+                    {{ valores.media|floatformat:2 }}
+                </span>
+            </p>
+
+            <p>
+                Mediana:
+                <span class="valor">
+                    {{ valores.mediana|floatformat:2 }}
+                </span>
+            </p>
+
+            <p>
+                Desvio padrão:
+                <span class="valor">
+                    {{ valores.desvio_padrao|floatformat:2 }}
+                </span>
+            </p>
+
+        </div>
+
+        <p class="observacao">
+            A média representa o valor central calculado a partir
+            de todos os registros. A mediana representa o valor
+            central da distribuição, enquanto o desvio padrão
+            indica o nível de dispersão dos dados.
+        </p>
+
+    </section>
+
+{% endfor %}
+
+
+</div>
+
+</body>
+
+</html>
