@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Investigação — Ponto de Orvalho e Chuva</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f5f6f8;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        nav {
+            background: white;
+            padding: 20px;
+            margin-bottom: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        nav h3 {
+            margin-bottom: 8px;
+        }
+
+        nav a {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .introducao {
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .secao {
+            background: white;
+            padding: 25px;
+            margin-bottom: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .secao h2 {
+            margin-top: 0;
+        }
+
+        .pergunta {
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+
+        .objetivo {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .grafico {
+            margin-top: 25px;
+            overflow-x: auto;
+        }
+
+        .resultados {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #555;
+            border-radius: 6px;
+        }
+
+        .resultados h3 {
+            margin-top: 0;
+        }
+
+        .resultados ul {
+            margin-bottom: 0;
+            padding-left: 25px;
+        }
+
+        .resultados li {
+            margin-bottom: 8px;
+        }
+
+        .valor {
+            font-weight: bold;
+        }
+
+        .observacao {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+    <nav>
+
+        <h3>Navegação</h3>
+
+        <a href="/">
+            Visão geral
+        </a>
+
+        <h3>Análises</h3>
+
+        <a href="/analises/comparacao/">
+            IoT × Open-Meteo
+        </a>
+
+        <a href="/analises/investigacao/">
+            Investigação
+        </a>
+
+        <h3>EDA</h3>
+
+        <a href="/eda/estatisticas/">
+            Estatísticas
+        </a>
+
+        <a href="/eda/outliers/">
+            Outliers
+        </a>
+
+        <h3>Dados</h3>
+
+        <a href="/dados/registros/">
+            Registros
+        </a>
+
+    </nav>
+
+    <h1>Investigação — Ponto de Orvalho e Chuva</h1>
+
+
+    <p class="introducao">
+        Análise da relação entre o ponto de orvalho, a temperatura do ar
+        e os eventos de precipitação registrados pelo Open-Meteo,
+        utilizando as medições de temperatura e umidade da estação IoT.
+    </p>
+
+
+    <!-- ====================================================== -->
+    <!-- 1. INÍCIO DA CHUVA -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>
+            1. Depressão do ponto de orvalho no início da chuva
+        </h2>
+
+        <p class="pergunta">
+            Qual é a magnitude da "Depressão do Ponto de Orvalho"
+            (T − Tpo) nos momentos exatos em que o evento Chuva
+            muda de Falso para Verdadeiro?
+        </p>
+
+        <p class="objetivo">
+            O objetivo é identificar a distância entre a temperatura
+            do ar e o ponto de orvalho no instante em que um novo
+            evento de chuva é detectado.
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_inicio_chuva|safe }}
+
+        </div>
+
+        <div class="resultados">
+
+            <h3>Resultados</h3>
+
+            <ul>
+
+                <li>
+                    Eventos de chuva analisados:
+                    <span class="valor">
+                        {{ quantidade_inicio_chuva }}
+                    </span>
+                </li>
+
+                <li>
+                    Depressão média:
+                    <span class="valor">
+                        {{ indicador_inicio.media|floatformat:2 }} °C
+                    </span>
+                </li>
+
+                <li>
+                    Depressão mediana:
+                    <span class="valor">
+                        {{ indicador_inicio.mediana|floatformat:2 }} °C
+                    </span>
+                </li>
+
+                <li>
+                    Menor depressão:
+                    <span class="valor">
+                        {{ indicador_inicio.minimo|floatformat:2 }} °C
+                    </span>
+                </li>
+
+                <li>
+                    Maior depressão:
+                    <span class="valor">
+                        {{ indicador_inicio.maximo|floatformat:2 }} °C
+                    </span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <p class="observacao">
+            A depressão representa a distância entre a temperatura
+            do ar e o ponto de orvalho. Quanto menor esse valor,
+            mais próxima está a condição de saturação.
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- 2. ANTES DA CHUVA -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>
+            2. Comportamento do ponto de orvalho antes da chuva
+        </h2>
+
+        <p class="pergunta">
+            Como a taxa de variação horária do Ponto de Orvalho
+            se comporta no período de 1 a 3 horas antes do evento
+            Chuva iniciar?
+        </p>
+
+        <p class="objetivo">
+            O objetivo é verificar se existe uma queda sistemática
+            do ponto de orvalho antes do início da precipitação e
+            avaliar com quanta antecedência essa alteração pode
+            ser observada.
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_antecedencia|safe }}
+
+        </div>
+
+        <div class="resultados">
+
+            <h3>Resultados</h3>
+
+            <ul>
+
+                <li>
+                    Taxa média nas 3 horas anteriores:
+                    <span class="valor">
+                        {{ indicador_antecedencia.media|floatformat:2 }}
+                        °C/h
+                    </span>
+                </li>
+
+                <li>
+                    Taxa mediana nas 3 horas anteriores:
+                    <span class="valor">
+                        {{ indicador_antecedencia.mediana|floatformat:2 }}
+                        °C/h
+                    </span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <p class="observacao">
+            Valores negativos indicam queda do ponto de orvalho;
+            valores positivos indicam aumento.
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- 3. DURANTE A CHUVA -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>
+            3. Temperatura e ponto de orvalho durante a chuva
+        </h2>
+
+        <p class="pergunta">
+            O Ponto de Orvalho e a Temperatura do Ar permanecem
+            estatisticamente colados, com amplitude próxima de zero,
+            enquanto o evento Chuva permanece como Verdadeiro?
+        </p>
+
+        <p class="objetivo">
+            O objetivo é verificar se a diferença entre a temperatura
+            do ar e o ponto de orvalho diminui e permanece pequena
+            durante a ocorrência contínua da precipitação.
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_durante_chuva|safe }}
+
+        </div>
+
+        <div class="resultados">
+
+            <h3>Resultados</h3>
+
+            <ul>
+
+                <li>
+                    Registros durante a chuva:
+                    <span class="valor">
+                        {{ quantidade_registros_chuva }}
+                    </span>
+                </li>
+
+                <li>
+                    Depressão média:
+                    <span class="valor">
+                        {{ indicador_durante.media|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Depressão mediana:
+                    <span class="valor">
+                        {{ indicador_durante.mediana|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Menor depressão:
+                    <span class="valor">
+                        {{ indicador_durante.minimo|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Maior depressão:
+                    <span class="valor">
+                        {{ indicador_durante.maximo|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Amplitude da depressão:
+                    <span class="valor">
+                        {{ indicador_durante.amplitude|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <p class="observacao">
+            A amplitude representa a diferença entre a maior e a
+            menor depressão observada durante os períodos classificados
+            como chuvosos.
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- 4. FIM DA CHUVA -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>
+            4. Comportamento do ponto de orvalho no fim da chuva
+        </h2>
+
+        <p class="pergunta">
+            Qual é o comportamento da taxa de variação do Ponto de
+            Orvalho no momento exato em que o evento Chuva muda
+            de Verdadeiro para Falso?
+        </p>
+
+        <p class="objetivo">
+            O objetivo é identificar se a interrupção da chuva está
+            associada a uma mudança significativa na velocidade de
+            variação do ponto de orvalho.
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_fim_chuva|safe }}
+
+        </div>
+
+        <div class="resultados">
+
+            <h3>Resultados</h3>
+
+            <ul>
+
+                <li>
+                    Eventos de fim de chuva:
+                    <span class="valor">
+                        {{ quantidade_fim_chuva }}
+                    </span>
+                </li>
+
+                <li>
+                    Temperatura média no fim da chuva:
+                    <span class="valor">
+                        {{ indicador_fim.media|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Taxa média no fim da chuva:
+                    <span class="valor">
+                        {{ indicador_fim.mediana|floatformat:2 }}
+                        °C/h
+                    </span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <p class="observacao">
+            Valores negativos representam queda do ponto de orvalho,
+            enquanto valores positivos representam aumento.
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- 5. DISTRIBUIÇÃO -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>
+            5. Distribuição do ponto de orvalho
+        </h2>
+
+        <p class="pergunta">
+            Existe diferença significativa na distribuição do
+            Ponto de Orvalho entre os períodos de Chuva = Verdadeiro
+            e Chuva = Falso para o microclima da varanda?
+        </p>
+
+        <p class="objetivo">
+            O objetivo é comparar a distribuição dos valores de
+            ponto de orvalho durante períodos chuvosos e secos,
+            procurando diferenças na mediana, dispersão e presença
+            de valores extremos.
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_distribuicao|safe }}
+
+        </div>
+
+        <div class="resultados">
+
+            <h3>Resultados</h3>
+
+            <ul>
+
+                <li>
+                    Média com chuva:
+                    <span class="valor">
+                        {{ indicador_distribuicao.media_chuva|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Média sem chuva:
+                    <span class="valor">
+                        {{ indicador_distribuicao.media_sem_chuva|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Mediana com chuva:
+                    <span class="valor">
+                        {{ indicador_distribuicao.mediana_chuva|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Mediana sem chuva:
+                    <span class="valor">
+                        {{ indicador_distribuicao.mediana_sem_chuva|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+                <li>
+                    Diferença entre as médias:
+                    <span class="valor">
+                        {{ indicador_distribuicao.diferenca_media|floatformat:2 }}
+                        °C
+                    </span>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <p class="observacao">
+            A caixa representa a concentração central dos dados,
+            enquanto os pontos individuais permitem visualizar a
+            dispersão e possíveis valores extremos.
+        </p>
+
+    </section>
+
+</div>
+
+</body>
+
+</html>

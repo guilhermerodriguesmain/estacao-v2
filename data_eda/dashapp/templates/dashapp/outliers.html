@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Outliers — EDA</title>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 30px;
+        background-color: #f5f6f8;
+        color: #222;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    .introducao {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 35px;
+    }
+
+    .secao {
+        background: white;
+        padding: 25px;
+        margin-bottom: 35px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .secao h2 {
+        margin-top: 0;
+    }
+
+    .navegacao {
+        margin-bottom: 35px;
+    }
+
+    .navegacao a {
+        color: #333;
+        text-decoration: none;
+        margin-right: 15px;
+    }
+
+    .navegacao a:hover {
+        text-decoration: underline;
+    }
+
+    .tabela-container {
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px;
+    }
+
+    th,
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f1f2f4;
+    }
+
+    .vazio {
+        color: #666;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>Detecção de outliers</h1>
+
+<p class="introducao">
+    Esta seção identifica valores que se afastam do comportamento
+    central das variáveis meteorológicas.
+    A detecção é realizada utilizando o método do intervalo
+    interquartil (IQR).
+</p>
+
+<div class="navegacao">
+
+    <a href="/">Visão geral</a>
+
+    <a href="/analises/comparacao/">
+        Comparação
+    </a>
+
+    <a href="/analises/investigacao/">
+        Investigação
+    </a>
+
+    <a href="/eda/estatisticas/">
+        Estatísticas
+    </a>
+
+    <a href="/dados/registros/">
+        Registros
+    </a>
+
+</div>
+
+{% for coluna, registros in outliers.items %}
+
+    <section class="secao">
+
+        <h2>{{ coluna }}</h2>
+
+        {% if registros %}
+
+            <p>
+                Foram encontrados
+                <strong>{{ registros|length }}</strong>
+                possíveis outliers.
+            </p>
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            {% for chave in registros.0.keys %}
+
+                                <th>{{ chave }}</th>
+
+                            {% endfor %}
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for registro in registros %}
+
+                            <tr>
+
+                                {% for valor in registro.values %}
+
+                                    <td>
+                                        {{ valor }}
+                                    </td>
+
+                                {% endfor %}
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p class="vazio">
+                Nenhum possível outlier foi identificado
+                nesta variável.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+{% endfor %}
+```
+
+</div>
+
+</body>
+
+</html>

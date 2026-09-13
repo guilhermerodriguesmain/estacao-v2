@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Comparação IoT × Open-Meteo</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f5f6f8;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+        nav {
+            background: white;
+            padding: 20px;
+            margin-bottom: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        nav h3 {
+            margin-bottom: 8px;
+        }
+
+        nav a {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        .introducao {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .secao {
+            background: white;
+            padding: 25px;
+            margin-bottom: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .secao h2 {
+            margin-top: 0;
+        }
+
+        .pergunta {
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+
+        .objetivo {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .grafico {
+            margin-top: 25px;
+            overflow-x: auto;
+        }
+
+        .resultados {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #555;
+            border-radius: 6px;
+        }
+
+        .resultados h3 {
+            margin-top: 0;
+        }
+
+        .resultados ul {
+            margin-bottom: 0;
+            padding-left: 25px;
+        }
+
+        .resultados li {
+            margin-bottom: 8px;
+        }
+
+        .valor {
+            font-weight: bold;
+        }
+
+        .observacao {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .conclusao {
+            background-color: #eef1f4;
+            padding: 20px;
+            border-radius: 6px;
+            line-height: 1.6;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Comparação IoT × Open-Meteo</h1>
+    <nav>
+
+        <h3>Navegação</h3>
+
+        <a href="/">
+            Visão geral
+        </a>
+
+        <h3>Análises</h3>
+
+        <a href="/analises/comparacao/">
+            IoT × Open-Meteo
+        </a>
+
+        <a href="/analises/investigacao/">
+            Investigação
+        </a>
+
+        <h3>EDA</h3>
+
+        <a href="/eda/estatisticas/">
+            Estatísticas
+        </a>
+
+        <a href="/eda/outliers/">
+            Outliers
+        </a>
+
+        <h3>Dados</h3>
+
+        <a href="/dados/registros/">
+            Registros
+        </a>
+
+    </nav>
+
+    <p class="introducao">
+
+        Esta análise compara as medições realizadas pela estação
+        meteorológica IoT com os dados do Open-Meteo, utilizado como
+        fonte de referência meteorológica.
+
+        O objetivo é verificar o comportamento das duas fontes e
+        quantificar suas diferenças para temperatura, umidade relativa
+        e ponto de orvalho.
+
+    </p>
+
+
+    <!-- ====================================================== -->
+    <!-- TEMPERATURA -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>1. Temperatura</h2>
+
+        <p class="pergunta">
+
+            A temperatura medida pela estação IoT acompanha o comportamento
+            apresentado pelo Open-Meteo?
+
+        </p>
+
+        <p class="objetivo">
+
+            O objetivo é comparar a evolução temporal das duas fontes
+            e medir a diferença entre a temperatura observada localmente
+            pela estação e a temperatura apresentada pela fonte de referência.
+
+        </p>
+
+        {% if grafico_temperatura %}
+
+            <div class="grafico">
+
+                {{ grafico_temperatura|safe }}
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="resultados">
+
+            <h3>Indicadores</h3>
+
+            <ul>
+
+                <li>
+
+                    Diferença média:
+
+                    <span class="valor">
+
+                        {{ indicadores_temperatura.diferenca_media|floatformat:2 }}
+
+                        °C
+
+                    </span>
+
+                </li>
+
+                <li>
+
+                    Erro absoluto médio (MAE):
+
+                    <span class="valor">
+
+                        {{ indicadores_temperatura.mae|floatformat:2 }}
+
+                        °C
+
+                    </span>
+
+                </li>
+
+                <li>
+
+                    Raiz do erro quadrático médio (RMSE):
+
+                    <span class="valor">
+
+                        {{ indicadores_temperatura.rmse|floatformat:2 }}
+
+                        °C
+
+                    </span>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <p class="observacao">
+
+            A diferença média indica se a estação tende a registrar
+            valores sistematicamente maiores ou menores que o Open-Meteo.
+
+            O MAE representa o erro absoluto médio, enquanto o RMSE
+            dá maior peso às diferenças mais elevadas.
+
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- UMIDADE -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>2. Umidade relativa do ar</h2>
+
+        <p class="pergunta">
+
+            A umidade relativa medida pela estação IoT apresenta
+            comportamento semelhante ao apresentado pelo Open-Meteo?
+
+        </p>
+
+        <p class="objetivo">
+
+            A comparação permite verificar se as variações de umidade
+            observadas localmente acompanham a referência meteorológica
+            utilizada no projeto.
+
+        </p>
+
+        {% if grafico_umidade %}
+
+            <div class="grafico">
+
+                {{ grafico_umidade|safe }}
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="resultados">
+
+            <h3>Indicadores</h3>
+
+            <ul>
+
+                <li>
+
+                    Diferença média:
+
+                    <span class="valor">
+
+                        {{ indicadores_umidade.diferenca_media|floatformat:2 }}
+
+                        %
+
+                    </span>
+
+                </li>
+
+                <li>
+
+                    Erro absoluto médio (MAE):
+
+                    <span class="valor">
+
+                        {{ indicadores_umidade.mae|floatformat:2 }}
+
+                        %
+
+                    </span>
+
+                </li>
+
+                <li>
+
+                    Raiz do erro quadrático médio (RMSE):
+
+                    <span class="valor">
+
+                        {{ indicadores_umidade.rmse|floatformat:2 }}
+
+                        %
+
+                    </span>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <p class="observacao">
+
+            Como a umidade relativa é influenciada pelas condições
+            específicas do local de medição, diferenças entre a estação
+            e a fonte de referência podem ocorrer mesmo quando ambas
+            apresentam tendências semelhantes.
+
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- PONTO DE ORVALHO -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>3. Ponto de orvalho</h2>
+
+        <p class="pergunta">
+
+            O ponto de orvalho calculado a partir das medições da estação
+            IoT apresenta comportamento próximo ao ponto de orvalho
+            calculado a partir dos dados do Open-Meteo?
+
+        </p>
+
+        <p class="objetivo">
+
+            O ponto de orvalho combina temperatura e umidade relativa
+            em uma única variável. Compará-lo permite observar como
+            diferenças nessas duas medições se refletem em uma variável
+            derivada.
+
+        </p>
+
+        {% if grafico_td %}
+
+            <div class="grafico">
+
+                {{ grafico_td|safe }}
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="resultados">
+
+            <h3>Indicadores</h3>
+
+            <ul>
+
+                <li>
+
+                    Diferença média:
+
+                    <span class="valor">
+
+                        {{ indicadores_td.diferenca_media|floatformat:2 }}
+
+                        °C
+
+                    </span>
+
+                </li>
+
+                <li>
+
+                    Erro absoluto médio (MAE):
+
+                    <span class="valor">
+
+                        {{ indicadores_td.mae|floatformat:2 }}
+
+                        °C
+
+                    </span>
+
+                </li>
+
+                <li>
+
+                    Raiz do erro quadrático médio (RMSE):
+
+                    <span class="valor">
+
+                        {{ indicadores_td.rmse|floatformat:2 }}
+
+                        °C
+
+                    </span>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <p class="observacao">
+
+            O ponto de orvalho calculado a partir do IoT será utilizado
+            como uma das principais variáveis da investigação dos eventos
+            de precipitação.
+
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- CONCLUSÃO -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>Interpretação</h2>
+
+        <div class="conclusao">
+
+            A comparação permite avaliar o comportamento da estação IoT
+            diante de uma referência meteorológica externa.
+
+            As diferenças encontradas não representam necessariamente
+            falhas da estação, pois a medição IoT representa o microclima
+            específico do local onde o sensor está instalado, enquanto
+            o Open-Meteo representa dados meteorológicos de referência
+            para a região.
+
+            Essa diferença entre escala local e referência regional
+            também é importante para interpretar os resultados da etapa
+            de investigação.
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+
+</html>

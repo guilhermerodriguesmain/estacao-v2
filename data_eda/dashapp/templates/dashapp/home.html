@@ -1,0 +1,272 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Estação IoT</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f5f6f8;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .introducao {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        nav {
+            background: white;
+            padding: 20px;
+            margin-bottom: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        nav h3 {
+            margin-bottom: 8px;
+        }
+
+        nav a {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .secao {
+            background: white;
+            padding: 25px;
+            margin-bottom: 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .secao h2 {
+            margin-top: 0;
+        }
+
+        .indicador {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 8px 0 0 0;
+        }
+
+        .descricao {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .grafico {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Estação IoT</h1>
+
+    <p class="introducao">
+
+        Visão geral dos dados coletados pela estação meteorológica IoT,
+        apresentando as condições atuais e o comportamento das principais
+        variáveis meteorológicas ao longo do período analisado.
+
+    </p>
+
+
+    <!-- ====================================================== -->
+    <!-- NAVEGAÇÃO -->
+    <!-- ====================================================== -->
+
+    <nav>
+
+        <h3>Navegação</h3>
+
+        <a href="/">
+            Visão geral
+        </a>
+
+        <h3>Análises</h3>
+
+        <a href="/analises/comparacao/">
+            IoT × Open-Meteo
+        </a>
+
+        <a href="/analises/investigacao/">
+            Investigação
+        </a>
+
+        <h3>EDA</h3>
+
+        <a href="/eda/estatisticas/">
+            Estatísticas
+        </a>
+
+        <a href="/eda/outliers/">
+            Outliers
+        </a>
+
+        <h3>Dados</h3>
+
+        <a href="/dados/registros/">
+            Registros
+        </a>
+
+    </nav>
+
+
+    <!-- ====================================================== -->
+    <!-- CONDIÇÕES ATUAIS -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>Condições atuais</h2>
+
+        <p class="descricao">
+
+            Os valores abaixo representam as medições mais recentes
+            disponibilizadas pela estação IoT.
+
+        </p>
+
+        <h3>Temperatura</h3>
+
+        <p class="indicador">
+            {{ temperatura_atual|safe }} °C
+        </p>
+
+        <h3>Umidade relativa do ar</h3>
+
+        <p class="indicador">
+            {{ umidade_atual|safe }} %
+        </p>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- TEMPERATURA -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>Variação da temperatura</h2>
+
+        <p class="descricao">
+
+            O gráfico apresenta a evolução da temperatura medida
+            pela estação IoT durante o período analisado.
+
+            A visualização permite observar tendências de aquecimento,
+            resfriamento e possíveis mudanças bruscas nas condições
+            locais.
+
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_temperatura|safe }}
+
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- UMIDADE -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>Variação da umidade relativa do ar</h2>
+
+        <p class="descricao">
+
+            A umidade relativa representa a quantidade de vapor de água
+            presente no ar em relação à quantidade máxima que o ar poderia
+            conter naquela temperatura.
+
+            A análise temporal permite observar períodos de aumento,
+            redução e maior estabilidade da umidade.
+
+        </p>
+
+        <div class="grafico">
+
+            {{ grafico_umidade|safe }}
+
+        </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- PONTO DE ORVALHO -->
+    <!-- ====================================================== -->
+
+    <section class="secao">
+
+        <h2>Variação do ponto de orvalho</h2>
+
+        <p class="descricao">
+
+            O ponto de orvalho é calculado a partir da temperatura
+            e da umidade relativa medidas pela estação.
+
+            Ele representa a temperatura na qual o ar atingiria
+            aproximadamente a saturação.
+
+            Essa variável será utilizada posteriormente nas análises
+            de comparação e investigação de eventos de precipitação.
+
+        </p>
+
+        <div class="grafico">
+
+            {{ ponto_orvalho|safe }}
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+
+</html>
