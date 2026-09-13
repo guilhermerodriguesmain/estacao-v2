@@ -16,7 +16,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DADOS_DIR = BASE_DIR / "dados"
 
 def carregar_dados():
-    
+    from coleta.iot import coletar_dados_iot, salvar_dados_csv
+    dados_iot = coletar_dados_iot()
+    salvar_dados_csv(dados_iot, "dados_iot.csv" )
+
+
+    from coleta.openmeteo import openmeteo_to_dataframe, salvar_dados_csv
+    dados_openmeteo = openmeteo_to_dataframe()
+    salvar_dados_csv(dados_openmeteo, "dados_openmeteo.csv")
+
+    from processamento.processamento import Processamento
+    padronizar = Processamento()
+    dados_iot_padronizados = padronizar.padronizar_dataframe_iot(
+    pd.read_csv(
+        "dados_iot.csv", 
+        sep=';', 
+        encoding='utf-8',
+        usecols=['temperatura', 'umidade', 'timestamp']) )
+
+    dados_openmeteo_padronizados = padronizar.padronizar_dataframe_openmeteo(
+        pd.read_csv(
+            "dados_openmeteo.csv", 
+            sep=';', 
+            encoding='utf-8',
+            ) )
+
+    dados_mesclados = padronizar.mesclar_dataframes(dados_iot_padronizados, dados_openmeteo_padronizados)
+
+    padronizar.salvar_dados_csv(dados_mesclados, "dados_meteorologicos.csv")
 
     return pd.read_csv(
         DADOS_DIR / "dados_meteorologicos.csv",
@@ -933,7 +960,6 @@ def estatisticas(request):
         }
     )
 
-
 def outliers(request):
 
     df = carregar_dados()
@@ -966,7 +992,6 @@ def outliers(request):
             "outliers": outliers
         }
     )
-
 
 def registros(request):
 

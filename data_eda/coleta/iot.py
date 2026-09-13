@@ -29,5 +29,7 @@ def salvar_dados_sql(df, db_path, table_name="dados_iot"):
     path.close()
     print(f"Dados salvos na tabela '{table_name}' do banco de dados '{db_path}'")
 
+"""
 dados = coletar_dados_iot()
 salvar_dados_csv(dados, "../dados/dados_iot.csv")
+"""

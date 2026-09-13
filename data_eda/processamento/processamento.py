@@ -58,7 +58,8 @@ class Processamento():
         df.to_sql(table_name, path, if_exists='replace', index=True)
         path.close()
         print(f"Dados salvos na tabela '{table_name}' do banco de dados '{db_path}'")
-        
+
+"""        
 padronizar = Processamento()
 
 dados_iot_padronizados = padronizar.padronizar_dataframe_iot(
@@ -79,3 +80,4 @@ dados_mesclados = padronizar.mesclar_dataframes(dados_iot_padronizados, dados_op
 
 padronizar.salvar_dados_csv(dados_mesclados, "../dados/dados_meteorologicos.csv")
 padronizar.salvar_dados_sql(dados_mesclados, "../dados_meteorologicos.sqlite", "dados_meteorologicos")
+"""

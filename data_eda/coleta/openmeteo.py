@@ -19,8 +19,7 @@ params = {
 	"latitude": -22.9194,
 	"longitude": -42.8186,
 	"hourly": ["temperature_2m", "relative_humidity_2m", "precipitation", "pressure_msl"],
-	"timezone": "auto",
-	"past_days": 5,
+	"timezone": "auto"
 }
 responses = openmeteo.weather_api(url, params = params)
 
@@ -71,4 +70,4 @@ def salvar_dados_sql(hourly_dataframe, db_path, table_name="dados_openmeteo"):
         path.close()
         print(f"Dados salvos na tabela '{table_name}' do banco de dados '{db_path}'")
 
-salvar_dados_csv(hourly_dataframe, "../dados/dados_openmeteo.csv")
+#salvar_dados_csv(hourly_dataframe, "../dados/dados_openmeteo.csv")
